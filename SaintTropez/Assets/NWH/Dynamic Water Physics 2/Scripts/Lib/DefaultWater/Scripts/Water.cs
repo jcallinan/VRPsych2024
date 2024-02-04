@@ -52,9 +52,17 @@ namespace NWH.DWP2.DefaultWater
             {
                 return;
             }
+            Vector4 waveSpeed = new Vector4(1,1,1);
+            float waveScale = 1; 
+            try
+            {
+                waveSpeed = mat.GetVector("WaveSpeed");
+                waveScale = mat.GetFloat("_WaveScale");
+            } catch (Exception ex)
+            {
+                Debug.LogWarning(ex.ToString());
+            }
 
-            Vector4 waveSpeed  = mat.GetVector("WaveSpeed");
-            float   waveScale  = mat.GetFloat("_WaveScale");
             Vector4 waveScale4 = new Vector4(waveScale, waveScale, waveScale * 0.4f, waveScale * 0.45f);
 
             // Time since level load, and do intermediate calculations with doubles
