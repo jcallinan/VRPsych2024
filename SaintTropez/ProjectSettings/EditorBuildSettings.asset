@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/_V4.unity
-    guid: 6b30ed23f99718740a3bbeb6eea7ea2f
+    path: Assets/Scenes/Milestone1_Fence_Fish_CoralReefGenerated_Test3.unity
+    guid: fe3036a094eb6b14492b716be931638f
   m_configObjects: {}
