@@ -30,11 +30,8 @@ public class CoralGenerator : MonoBehaviour
             // Adjust y based on terrain height or a predefined floor level
             position.y = GetTerrainHeightAt(position.x, position.z) + scale * someVerticalOffset; // Adjust for object size if necessary
 
-            Quaternion rotation = Quaternion.Euler(
-                Random.Range(0, 360),
-                Random.Range(0, 360),
-                Random.Range(0, 360)
-            );
+            Quaternion rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+
 
             GameObject coralPrefab = coralPrefabs[Random.Range(0, coralPrefabs.Length)];
             GameObject coral = Instantiate(coralPrefab, position, rotation, transform);
