@@ -173,40 +173,56 @@ namespace StarterAssets
 
         private void JumpAndGravity()
         {
+            // Check if the player is grounded or in water
             if (Grounded || IsInWater)
             {
                 _fallTimeoutDelta = FallTimeout;
                 if (_verticalVelocity < 0.0f)
                 {
-                    _verticalVelocity = IsInWater ? 0f : -2f;
+                    _verticalVelocity = IsInWater ? 0f : -2f; // Reset vertical velocity when in water or grounded
                 }
 
                 if (_input.jump && _jumpTimeoutDelta <= 0.0f)
                 {
-                    _verticalVelocity = IsInWater ? SwimForce : Mathf.Sqrt(JumpHeight * -2f * Gravity);
-                    _jumpTimeoutDelta = JumpTimeout;
+                    if (IsInWater)
+                    {
+                        // Calculate the swim direction based on input and facing direction
+                        Vector3 swimDirection = transform.forward * _input.move.y + transform.right * _input.move.x;
+                        swimDirection = swimDirection.normalized * SwimForce;
+                        _controller.Move(swimDirection * Time.deltaTime); // Apply swimming force in the desired direction
+                        _verticalVelocity = 0; // Reset vertical velocity to simulate buoyancy
+                    }
+                    else
+                    {
+                        // Apply jump velocity
+                        _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    }
+
+                    _jumpTimeoutDelta = JumpTimeout; // Reset jump timeout
                 }
 
                 if (_jumpTimeoutDelta >= 0.0f)
                 {
-                    _jumpTimeoutDelta -= Time.deltaTime;
+                    _jumpTimeoutDelta -= Time.deltaTime; // Decrement jump timeout delta
                 }
             }
             else
             {
-                _jumpTimeoutDelta = JumpTimeout;
+                _jumpTimeoutDelta = JumpTimeout; // Reset jump timeout when not grounded or in water
                 if (_fallTimeoutDelta >= 0.0f)
                 {
-                    _fallTimeoutDelta -= Time.deltaTime;
+                    _fallTimeoutDelta -= Time.deltaTime; // Decrement fall timeout delta
                 }
-                _input.jump = false;
+                _input.jump = false; // Disable jump input when airborne
             }
 
+            // Apply gravity (modified for swimming if in water)
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += (IsInWater ? SwimmingGravity : Gravity) * Time.deltaTime;
             }
         }
+
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {
