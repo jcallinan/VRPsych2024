@@ -51,7 +51,13 @@
     },
     {
       "name": "/actions/default/in/Move",
-      "type": "vector2"
+      "type": "vector2",
+      "requirement": "mandatory"
+    },
+    {
+      "name": "/actions/default/in/MoveUpDown",
+      "type": "vector2",
+      "requirement": "mandatory"
     },
     {
       "name": "/actions/default/out/Haptic",

@@ -1,73 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 
 public class VRPlayerMovement : MonoBehaviour
 {
-    public SteamVR_Action_Vector2 input;
-    public float speed = 2.0f;
+    public SteamVR_Action_Vector2 moveAction;
+    public float speed = 3.0f;
 
     private CharacterController characterController;
-    private Transform cameraRigTransform;
+    private Transform vrCameraTransform;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        if (characterController == null)
-        {
-            Debug.LogError("CharacterController is not attached to VR Player");
-        }
-
-        cameraRigTransform = SteamVR_Render.Top().head.transform;
+        vrCameraTransform = Camera.main.transform; // Assuming the main camera is the VR headset
     }
 
     void Update()
     {
-        HandleHead();
-        HandleHeight();
-        CalculateMovement();
-    }
+        Vector2 input = moveAction.GetAxis(SteamVR_Input_Sources.Any);
+        // Use the camera's forward direction as the basis for movement direction
+        Vector3 forward = vrCameraTransform.forward;
+        Vector3 right = vrCameraTransform.right;
 
-    private void HandleHead()
-    {
-        // Ensure the head is always aligned with the camera rig
-        Vector3 headPosition = cameraRigTransform.position;
-        headPosition.y = transform.position.y;
-        transform.position = headPosition;
-    }
+        // The input.y component affects movement in the camera's forward direction (including up and down)
+        // The input.x component affects movement in the camera's right direction (horizontal)
+        Vector3 direction = (forward * input.y + right * input.x).normalized;
 
-    private void HandleHeight()
-    {
-        // Adjust the height based on the head's position
-        float headHeight = Mathf.Clamp(cameraRigTransform.localPosition.y, 1, 2);
-        characterController.height = headHeight;
-
-        // Cut in half, add skin
-        Vector3 newCenter = Vector3.zero;
-        newCenter.y = characterController.height / 2;
-        newCenter.y += characterController.skinWidth;
-
-        // Move capsule in local space
-        newCenter.x = cameraRigTransform.localPosition.x;
-        newCenter.z = cameraRigTransform.localPosition.z;
-
-        // Apply
-        characterController.center = newCenter;
-    }
-
-    private void CalculateMovement()
-    {
-        // Get input
-        Vector2 movement = input.axis;
-        Vector3 direction = Vector3.zero;
-        direction.x = movement.x;
-        direction.z = movement.y;
-
-        // Transform direction to be relative to camera
-        direction = cameraRigTransform.TransformDirection(direction);
-
-        // Move
-        characterController.Move(speed * Time.deltaTime * Vector3.ProjectOnPlane(direction, Vector3.up));
+        // Apply the calculated direction to the character controller
+        // No need to project on plane since we want to include vertical movement
+        characterController.Move(direction * speed * Time.deltaTime);
     }
 }

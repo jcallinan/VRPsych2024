@@ -8,10 +8,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Water Specular Mirror
-  m_Shader: {fileID: 4800000, guid: 104cb0e3a7464a3696069ea84b145eee, type: 3}
+  m_Shader: {fileID: 4800000, guid: b315d396d4374dfa8c738c3a5d21ea0d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _NORMALMAP
+  m_InvalidKeywords:
   - EFFECT_ALBEDO2
   - EFFECT_FOAM
   - EFFECT_MICROWAVE
@@ -19,7 +21,6 @@ Material:
   - EFFECT_NORMALMAP2
   - EFFECT_PARALLAX
   - EFFECT_REFLECTION
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -199,6 +200,7 @@ Material:
     - _IntensityMicrowave: 0.2
     - _IntensityMt: 2.4
     - _IntensityNm: 0.85
+    - _IntensityNmDetail: 1
     - _IntensityRef: 1.7
     - _InvFade: 0
     - _MainDetailFlow: 0
@@ -285,4 +287,5 @@ Material:
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 0.5}
     - _SpecColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
     - _SpecularColor: {r: 0.5808823, g: 0.5808823, b: 0.5808823, a: 1}
+    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
   m_BuildTextureStacks: []
