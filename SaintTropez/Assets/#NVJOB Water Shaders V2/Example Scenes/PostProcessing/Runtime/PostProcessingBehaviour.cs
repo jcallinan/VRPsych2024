@@ -286,7 +286,9 @@ namespace UnityEngine.PostProcessing
                 Graphics.Blit(dst, destination);
 
                 var oldRt = RenderTexture.active;
-                profile.monitors.onFrameEndEditorOnly(dst);
+              //  profile.monitors.onFrameEndEditorOnly(dst);
+             
+
                 RenderTexture.active = oldRt;
             }
 #endif

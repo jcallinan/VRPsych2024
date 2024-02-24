@@ -110,8 +110,8 @@ namespace UnityEditor.PostProcessing
 
             m_MonitorNames = monitorNames.ToArray();
 
-            if (m_Monitors.Count > 0)
-                m_ConcreteTarget.monitors.onFrameEndEditorOnly = OnFrameEnd;
+            if (m_Monitors.Count > 0) { }
+             // m_ConcreteTarget.monitors.onFrameEndEditorOnly = OnFrameEnd;
         }
 
         void OnDisable()
