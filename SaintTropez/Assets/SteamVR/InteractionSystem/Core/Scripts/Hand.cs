@@ -1090,7 +1090,14 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         protected virtual void OnDisable()
         {
+            try
+            {
             inputFocusAction.enabled = false;
+            } catch (Exception ex)
+            {
+
+            }
+
 
             CancelInvoke();
         }

@@ -64,7 +64,17 @@ namespace Valve.VR
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public Vector2 GetAxis(SteamVR_Input_Sources inputSource)
         {
-            return sourceMap[inputSource].axis;
+            Vector2 iGetAxis = new Vector2(0,0);
+            try
+            {
+                iGetAxis = sourceMap[inputSource].axis;
+            } catch (Exception ex)
+            {
+
+            }
+
+           
+            return iGetAxis;
         }
 
         /// <summary>The Vector2 value difference between this update and the previous update.</summary>
