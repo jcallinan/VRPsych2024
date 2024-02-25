@@ -14,11 +14,14 @@ public class SubmarineMover : MonoBehaviour
 
     public Renderer jumpHighlight;
 
+    // Reference to the VR headset Transform for reading head tilt.
+    public Transform vrHeadset;
+
     private Vector3 movement;
-    private float verticalSpeed = 0f;
-    private float gravity = -9.81f;
-    private float jumpSpeed = 5f;
-    private float moveSpeed = 5f; // New variable to control forward/backward movement speed
+    public float verticalSpeed = 0f;
+    public float gravity = -9.81f; // Gravity effect on the player
+    public float jumpSpeed = 5f; // Speed at which the player will "jump" or move upwards
+    public float moveSpeed = 5f; // Movement speed based on joystick input
     private float glow;
     private SteamVR_Input_Sources hand;
     private Interactable interactable;
@@ -36,11 +39,17 @@ public class SubmarineMover : MonoBehaviour
             Vector2 joystickInput = moveAction[hand].axis;
             movement = new Vector3(joystickInput.x, 0, joystickInput.y);
 
-            // Adjust glow based on jump action state (for visual feedback, if needed)
+            // Adjust glow based on jump action state for visual feedback
             glow = Mathf.Lerp(glow, jumpAction[hand].state ? 1.5f : 1.0f, Time.deltaTime * 20);
 
-            // Optionally adjust joystick visual representation
+            // Adjust joystick visual representation based on input
             Joystick.localPosition = new Vector3(joystickInput.x, 0, joystickInput.y) * joyMove;
+
+            // Check for jump action and apply vertical movement if triggered
+            if (jumpAction.GetStateDown(hand))
+            {
+                verticalSpeed = jumpSpeed;
+            }
         }
         else
         {
@@ -52,32 +61,27 @@ public class SubmarineMover : MonoBehaviour
     private void FixedUpdate()
     {
         HandleMovement();
-        HandleJumpAndGravity();
     }
 
     private void HandleMovement()
     {
-        // Convert local movement direction to world space
-        Vector3 worldMovement = transform.TransformDirection(movement) * moveSpeed;
-        characterController.Move(worldMovement * Time.fixedDeltaTime);
-    }
+        // Handle horizontal movement based on joystick input
+        Vector3 horizontalMovement = transform.TransformDirection(movement) * moveSpeed;
 
-    private void HandleJumpAndGravity()
-    {
-        if (characterController.isGrounded)
+        // Apply gravity continuously, but allow "jumping" or swimming upwards anytime
+        if (!characterController.isGrounded)
         {
-            verticalSpeed = 0; // Reset vertical speed on ground
-            if (jumpAction.GetStateDown(hand)) // Check for jump input
-            {
-                verticalSpeed = jumpSpeed; // Apply jump speed
-            }
-        }
-        else
-        {
-            verticalSpeed += gravity * Time.fixedDeltaTime; // Apply gravity
+            verticalSpeed += gravity * Time.fixedDeltaTime;
         }
 
-        // Apply vertical movement (jumping and gravity)
-        characterController.Move(Vector3.up * verticalSpeed * Time.fixedDeltaTime);
+        // Prevent accumulating negative vertical speed indefinitely when grounded
+        if (characterController.isGrounded && verticalSpeed < 0)
+        {
+            verticalSpeed = 0;
+        }
+
+        // Combine horizontal movement with vertical movement (jumping/swimming and gravity)
+        Vector3 finalMovement = horizontalMovement + Vector3.up * verticalSpeed;
+        characterController.Move(finalMovement * Time.fixedDeltaTime);
     }
 }
