@@ -5,20 +5,20 @@ using Valve.VR.InteractionSystem;
 public class SubmarineMover : MonoBehaviour
 {
     public Transform Joystick;
-    public float joyMove = 0.1f;
+    public float joyMove = 0.1f; // Adjust this to scale movement sensitivity
 
     public SteamVR_Action_Vector2 moveAction = SteamVR_Input.GetAction<SteamVR_Action_Vector2>("platformer", "Move");
     public SteamVR_Action_Boolean jumpAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("platformer", "Jump");
 
-    public CharacterController characterController; // Reference to the CharacterController
+    public CharacterController characterController;
 
     public Renderer jumpHighlight;
 
     private Vector3 movement;
-    private bool jumpRequest = false;
-    private float verticalSpeed = 0f; // Vertical speed for jumping/gravity
-    private float gravity = -9.81f; // Gravity effect
-    private float jumpSpeed = 5f; // Initial speed for jumps
+    private float verticalSpeed = 0f;
+    private float gravity = -9.81f;
+    private float jumpSpeed = 5f;
+    private float moveSpeed = 5f; // New variable to control forward/backward movement speed
     private float glow;
     private SteamVR_Input_Sources hand;
     private Interactable interactable;
@@ -26,11 +26,6 @@ public class SubmarineMover : MonoBehaviour
     private void Start()
     {
         interactable = GetComponent<Interactable>();
-       // characterController = GetComponent<CharacterController>();
-        if (characterController == null)
-        {
-            Debug.LogError("CharacterController component not found. Please attach a CharacterController to the player GameObject.");
-        }
     }
 
     private void Update()
@@ -38,36 +33,43 @@ public class SubmarineMover : MonoBehaviour
         if (interactable.attachedToHand)
         {
             hand = interactable.attachedToHand.handType;
-            Vector2 m = moveAction[hand].axis;
-            movement = new Vector3(m.x, 0, m.y) * joyMove;
+            Vector2 joystickInput = moveAction[hand].axis;
+            movement = new Vector3(joystickInput.x, 0, joystickInput.y);
 
-            if (jumpAction[hand].stateDown && characterController.isGrounded)
-            {
-                jumpRequest = true;
-            }
-
+            // Adjust glow based on jump action state (for visual feedback, if needed)
             glow = Mathf.Lerp(glow, jumpAction[hand].state ? 1.5f : 1.0f, Time.deltaTime * 20);
+
+            // Optionally adjust joystick visual representation
+            Joystick.localPosition = new Vector3(joystickInput.x, 0, joystickInput.y) * joyMove;
         }
         else
         {
             movement = Vector3.zero;
-            jumpRequest = false;
             glow = 0;
         }
-
-        // Optional: Adjust jumpHighlight based on jump state
-        // jumpHighlight.sharedMaterial.SetColor("_EmissionColor", Color.white * glow);
     }
 
     private void FixedUpdate()
     {
+        HandleMovement();
+        HandleJumpAndGravity();
+    }
+
+    private void HandleMovement()
+    {
+        // Convert local movement direction to world space
+        Vector3 worldMovement = transform.TransformDirection(movement) * moveSpeed;
+        characterController.Move(worldMovement * Time.fixedDeltaTime);
+    }
+
+    private void HandleJumpAndGravity()
+    {
         if (characterController.isGrounded)
         {
             verticalSpeed = 0; // Reset vertical speed on ground
-            if (jumpRequest)
+            if (jumpAction.GetStateDown(hand)) // Check for jump input
             {
                 verticalSpeed = jumpSpeed; // Apply jump speed
-                jumpRequest = false;
             }
         }
         else
@@ -75,7 +77,7 @@ public class SubmarineMover : MonoBehaviour
             verticalSpeed += gravity * Time.fixedDeltaTime; // Apply gravity
         }
 
-        Vector3 finalMovement = movement + Vector3.up * verticalSpeed;
-        characterController.Move(finalMovement * Time.fixedDeltaTime);
+        // Apply vertical movement (jumping and gravity)
+        characterController.Move(Vector3.up * verticalSpeed * Time.fixedDeltaTime);
     }
 }
