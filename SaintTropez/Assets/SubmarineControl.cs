@@ -24,7 +24,7 @@ public class SubmarineControl : MonoBehaviour
     {
         HandleLeverMovement(leftHandPose, leftHandLeverType, ref leftHandIsGrabbing, ref leftHandLastPosition);
         HandleLeverMovement(rightHandPose, rightHandLeverType, ref rightHandIsGrabbing, ref rightHandLastPosition);
-        TurnSubmarine();
+       
     }
 
     void HandleLeverMovement(SteamVR_Behaviour_Pose handPose, LeverType leverType, ref bool isGrabbing, ref Vector3 lastHandPosition)
@@ -55,6 +55,7 @@ public class SubmarineControl : MonoBehaviour
             }
 
             lastHandPosition = handPose.transform.localPosition;
+            TurnSubmarine();
         }
     }
 
