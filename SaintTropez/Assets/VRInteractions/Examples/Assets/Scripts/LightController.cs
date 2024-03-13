@@ -31,8 +31,8 @@ public class LightController : MonoBehaviour {
 			mAnimation["Bob"].time = Random.Range(0.0f, mAnimation["Bob"].length);
 
 		// Initialize the light with it's first colour and intensity
-		SetLightColour (Colours [CurrentColour]);
-		SetModelColour (Materials [CurrentColour]);		
+		//SetLightColour (Colours [CurrentColour]);
+	 //	SetModelColour (Materials [CurrentColour]);		
 	}
 
 	/// <summary>
@@ -96,7 +96,7 @@ public class LightController : MonoBehaviour {
 
 	public void IntensityChanged(VRLever _lever, float _currentValue, float _lastValue)
 	{
-		SetIntensity(_currentValue);
+		//SetIntensity(_currentValue);
 	}
 
 	/// <summary>
@@ -110,33 +110,42 @@ public class LightController : MonoBehaviour {
 			return;
 		}
 			
-		SetIntensity(_lever.Value);
+		//SetIntensity(_lever.Value);
 	}
     /// <summary>
     /// Moves the CharacterController up and down.
     /// </summary>
-	/// <param name="_lever">Lever.</param>
+    /// <param name="_lever">Lever.</param>
+    /// <param name="_movement">Movement amount.</param>
+    /// <param name="_lastValue">Last value of the lever.</param>
     public void MoveUpDown(VRLever _lever, float _movement, float _lastValue)
     {
-      
-        if (characterController != null)
+        if (_lever != null && _lever.Value != _lastValue)
         {
-            Vector3 movement = transform.up * _movement;
-            characterController.Move(movement);
+            if (characterController != null)
+            {
+                Vector3 movement = transform.up * _movement;
+                characterController.Move(movement);
+            }
         }
     }
 
     /// <summary>
     /// Moves the CharacterController left and right.
     /// </summary>
-	/// <param name="_lever">Lever.</param>
+    /// <param name="_lever">Lever.</param>
+    /// <param name="_movement">Movement amount.</param>
+    /// <param name="_lastValue">Last value of the lever.</param>
     public void MoveLeftRight(VRLever _lever, float _movement, float _lastValue)
     {
-      
-        if (characterController != null)
+        if (_lever != null && _lever.Value != _lastValue)
         {
-            Vector3 movement = transform.right * _movement;
-            characterController.Move(movement);
+            if (characterController != null)
+            {
+                Vector3 movement = transform.right * _movement;
+                movement.y = 0f; // Exclude vertical movement to prevent spinning in VR
+                characterController.Move(movement);
+            }
         }
     }
 
