@@ -204,7 +204,7 @@ public class VRLever : VRInteractable {
 		}
 
 		if (isActing == true) {
-			controller.HapticVibration (VibrationStrength, Time.deltaTime); // If there is a controller attached provide haptic feedback.
+		//	controller.HapticVibration (VibrationStrength, Time.deltaTime); // If there is a controller attached provide haptic feedback.
 		}
 	}
 

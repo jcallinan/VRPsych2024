@@ -11,13 +11,14 @@ public class LightController : MonoBehaviour {
 	Light mLight;
 	MeshRenderer mMeshRenderer;
 	Animation mAnimation;
+	public CharacterController characterController;
 
-	void OnEnable()
+    void OnEnable()
 	{
 		
 		mLight = GetComponent<Light> ();
 		if (mLight == null)
-			Debug.LogError ("Liight is missing from " + name);
+			Debug.LogError ("Light is missing from " + name);
 
 		mMeshRenderer = GetComponent<MeshRenderer> ();
 		if (mMeshRenderer == null)
@@ -111,5 +112,32 @@ public class LightController : MonoBehaviour {
 			
 		SetIntensity(_lever.Value);
 	}
+    /// <summary>
+    /// Moves the CharacterController up and down.
+    /// </summary>
+	/// <param name="_lever">Lever.</param>
+    public void MoveUpDown(VRLever _lever, float _movement, float _lastValue)
+    {
+      
+        if (characterController != null)
+        {
+            Vector3 movement = transform.up * _movement;
+            characterController.Move(movement);
+        }
+    }
+
+    /// <summary>
+    /// Moves the CharacterController left and right.
+    /// </summary>
+	/// <param name="_lever">Lever.</param>
+    public void MoveLeftRight(VRLever _lever, float _movement, float _lastValue)
+    {
+      
+        if (characterController != null)
+        {
+            Vector3 movement = transform.right * _movement;
+            characterController.Move(movement);
+        }
+    }
 
 }
