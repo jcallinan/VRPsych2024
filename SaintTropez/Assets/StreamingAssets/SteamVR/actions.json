@@ -64,7 +64,15 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/Empty",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
+      "type": "vibration"
+    },
+    {
+      "name": "/actions/default/out/EmptyHaptic",
       "type": "vibration"
     },
     {

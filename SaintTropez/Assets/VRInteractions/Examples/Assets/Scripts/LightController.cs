@@ -12,6 +12,7 @@ public class LightController : MonoBehaviour {
 	MeshRenderer mMeshRenderer;
 	Animation mAnimation;
 	public CharacterController characterController;
+    public float maxHeight = 10f; // Maximum height the player can move to
 
     void OnEnable()
 	{
@@ -113,39 +114,43 @@ public class LightController : MonoBehaviour {
 		//SetIntensity(_lever.Value);
 	}
     /// <summary>
-    /// Moves the CharacterController up and down.
+    /// Moves the CharacterController up and down, ensuring it does not go above maxHeight.
     /// </summary>
-    /// <param name="_lever">Lever.</param>
-    /// <param name="_movement">Movement amount.</param>
-    /// <param name="_lastValue">Last value of the lever.</param>
     public void MoveUpDown(VRLever _lever, float _movement, float _lastValue)
     {
-        if (_lever != null && _lever.Value != _lastValue)
+        if (_lever != null && _lever.Value != _lastValue && characterController != null)
         {
-            if (characterController != null)
+            Vector3 movement = transform.up * _movement;
+            movement.x = 0f; // Exclude horizontal movement
+            movement.z = 0f; // Exclude depth movement
+
+            // Predict the next position of the player
+            Vector3 nextPosition = characterController.transform.position + movement;
+
+            // Limit the y position to maxHeight
+            if (nextPosition.y > maxHeight)
             {
-                Vector3 movement = transform.up * _movement;
-                characterController.Move(movement);
+                // Adjust movement so that it stops exactly at maxHeight
+                float difference = maxHeight - characterController.transform.position.y;
+                movement = transform.up * difference;
             }
+
+            characterController.Move(movement);
         }
     }
 
     /// <summary>
     /// Moves the CharacterController left and right.
     /// </summary>
-    /// <param name="_lever">Lever.</param>
-    /// <param name="_movement">Movement amount.</param>
-    /// <param name="_lastValue">Last value of the lever.</param>
     public void MoveLeftRight(VRLever _lever, float _movement, float _lastValue)
     {
-        if (_lever != null && _lever.Value != _lastValue)
+        if (_lever != null && _lever.Value != _lastValue && characterController != null)
         {
-            if (characterController != null)
-            {
-                Vector3 movement = transform.right * _movement;
-                movement.y = 0f; // Exclude vertical movement to prevent spinning in VR
-                characterController.Move(movement);
-            }
+            Vector3 movement = transform.right * _movement;
+            movement.y = 0f; // Exclude vertical movement
+            movement.z = 0f; // Exclude depth movement
+
+            characterController.Move(movement);
         }
     }
 
