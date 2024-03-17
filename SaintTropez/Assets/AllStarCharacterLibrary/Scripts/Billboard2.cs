@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Billboard2 : MonoBehaviour 
 {
-	Transform 			camera;
+    new Transform 			camera;
 	public bool		flipFacing;
 
 	// Use this for initialization

@@ -106,6 +106,7 @@ namespace UnityStandardAssets.ImageEffects
             return cachedCamera.WorldToViewportPoint((worldDist-cachedCamera.nearClipPlane) * cachedCamera.transform.forward + cachedCamera.transform.position).z / (cachedCamera.farClipPlane-cachedCamera.nearClipPlane);
         }
 
+        [Obsolete]
         private void WriteCoc ( RenderTexture fromTo, bool fgDilate) {
             dofHdrMaterial.SetTexture("_FgOverlap", null);
 
@@ -144,6 +145,7 @@ namespace UnityStandardAssets.ImageEffects
             }
         }
 
+        [Obsolete]
         void OnRenderImage (RenderTexture source, RenderTexture destination) {
             if (!CheckResources ()) {
                 Graphics.Blit (source, destination);

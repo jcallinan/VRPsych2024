@@ -143,5 +143,10 @@ namespace Valve.VR.InteractionSystem
 				}
 			}
 		}
-	}
+        public bool IsGrabbed
+        {
+            get { return interactable.attachedToHand != null; }
+        }
+
+    }
 }

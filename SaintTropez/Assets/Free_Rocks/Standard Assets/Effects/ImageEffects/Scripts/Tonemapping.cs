@@ -127,6 +127,7 @@ namespace UnityStandardAssets.ImageEffects
 
         // attribute indicates that the image filter chain will continue in LDR
         [ImageEffectTransformsToLDR]
+        [Obsolete]
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
             if (CheckResources() == false)

@@ -94,6 +94,7 @@ namespace UnityStandardAssets.ImageEffects
             return isSupported;
         }
 
+        [Obsolete]
         public void OnRenderImage (RenderTexture source, RenderTexture destination)
         {
             if (CheckResources()==false)
@@ -314,6 +315,7 @@ namespace UnityStandardAssets.ImageEffects
             RenderTexture.ReleaseTemporary (secondQuarterRezColor);
         }
 
+        [Obsolete]
         private void AddTo (float intensity_, RenderTexture from, RenderTexture to)
         {
             screenBlend.SetFloat ("_Intensity", intensity_);
@@ -321,6 +323,7 @@ namespace UnityStandardAssets.ImageEffects
             Graphics.Blit (from, to, screenBlend, 9);
         }
 
+        [Obsolete]
         private void BlendFlares (RenderTexture from, RenderTexture to)
         {
             lensFlareMaterial.SetVector ("colorA", new Vector4 (flareColorA.r, flareColorA.g, flareColorA.b, flareColorA.a) * lensflareIntensity);
@@ -343,6 +346,7 @@ namespace UnityStandardAssets.ImageEffects
             Graphics.Blit (from, to, brightPassFilterMaterial, 1);
         }
 
+        [Obsolete]
         private void Vignette (float amount, RenderTexture from, RenderTexture to)
         {
             if (lensFlareVignetteMask)

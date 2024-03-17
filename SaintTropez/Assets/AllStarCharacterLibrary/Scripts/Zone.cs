@@ -14,7 +14,7 @@ public class Zone : MonoBehaviour
 	public List<Collider>		floors;
 	public	Transform			player;
 	public ASCLBasicController 	abc;
-	public Collider 			collider;
+	public new Collider 			collider;
 
 	void Start()
 	{

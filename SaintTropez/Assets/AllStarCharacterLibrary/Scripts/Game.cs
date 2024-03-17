@@ -186,7 +186,7 @@ public class Game : MonoBehaviour
 		{
 			if(enemies[i].playerSighted)
 			{
-				if(enemies[i].playerDistance<enemies[i].visualRange);
+				if(enemies[i].playerDistance<enemies[i].visualRange)
 				{
 					eBary+=enemies[i].transform.position;
 					eCount+=1;

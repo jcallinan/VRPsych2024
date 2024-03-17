@@ -7,7 +7,7 @@ public class EnvTarget : MonoBehaviour
 	public Game 			game;
 	public envTargetType	type;
 	public Zone				zone;
-	public Collider			collider;
+	public new Collider			collider;
 
 
 	// Use this for initialization
